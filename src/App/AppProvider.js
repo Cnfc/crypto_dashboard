@@ -13,8 +13,14 @@ export class AppProvider extends Component {
     }
   }
 
-  confirmFavorites() {
-    console.log('Sejj');
+  confirmFavorites = () => {
+    this.setState({
+      firstVisit: false,
+      page: 'dashboard'
+    });
+    localStorage.setItem('cryptoDash', JSON.stringify({
+      test: 'hello'
+    }))
   }
 
   savedSettings() {

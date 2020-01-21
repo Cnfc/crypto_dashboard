@@ -1,10 +1,14 @@
 import React from 'react';
+import { AppContext } from '../App/AppProvider';
 
-function WelcomeMessage() {
+export default function ({ firstVisit }) {
   return (
-    <div>
-      Welcome to Dashboard
-    </div>
-  )
-}
-export default WelcomeMessage;
+    <AppContext.Consumer>
+      {({ firstVisit }) =>
+        firstVisit ?
+          <div>Welcome to CryptoDAsh, please select your favorite coins to begin.</div>
+          : null
+      }
+    </AppContext.Consumer>
+  );
+};
