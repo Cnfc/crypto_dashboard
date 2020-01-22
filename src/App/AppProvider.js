@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-
+import _ from 'lodash';
 const cc = require('cryptocompare');
+
+
+
+const MAX_FAVORITES = 10;
 
 export const AppContext = React.createContext();
 
@@ -9,9 +13,13 @@ export class AppProvider extends Component {
     super(props);
     this.state = {
       page: 'dashboard',
-      setPage: this.setPage,
+      favorites: ['BTC', 'ETH'],
       ...this.savedSettings(),
       confirmFavorites: this.confirmFavorites,
+      setPage: this.setPage,
+      addCoin: this.addCoin,
+      removeCoin: this.removeCoin,
+      isInFavorites: this.isInFavorites,
       coinList: null
     }
   }
@@ -20,10 +28,25 @@ export class AppProvider extends Component {
     this.fetchCoins();
   }
 
+  isInFavorites = key => _.includes(this.state.favorites, key)
+
   fetchCoins = async () => {
     let coinList = (await cc.coinList()).Data;
     this.setState({ coinList })
     console.log(coinList)
+  }
+
+  addCoin = (key) => {
+    let favorites = [...this.state.favorites];
+    if (favorites.length < MAX_FAVORITES) {
+      favorites.push(key);
+      this.setState({ favorites })
+    }
+  }
+
+  removeCoin = (key) => {
+    let favorites = [...this.state.favorites];
+    this.setState({ favorites: _.pull(favorites, key) })
   }
 
 
@@ -33,7 +56,7 @@ export class AppProvider extends Component {
       page: 'dashboard'
     });
     localStorage.setItem('cryptoDash', JSON.stringify({
-      test: 'hello'
+      favorites: this.state.favorites
     }))
   }
 
@@ -43,7 +66,9 @@ export class AppProvider extends Component {
     if (!cryptoDashData) {
       return { page: 'settings', firstVisit: true }
     }
-    return {};
+    let { favorites } = cryptoDashData;
+
+    return { favorites };
   }
 
   setPage = page => this.setState({ page })
