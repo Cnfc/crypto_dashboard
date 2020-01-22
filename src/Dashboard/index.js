@@ -3,6 +3,7 @@ import Page from '../Shared/Page';
 import styled from 'styled-components';
 import PriceGrid from './PriceGrid';
 import CoinSportlight from './CoinSportlight';
+import PriceChart from './PriceChart';
 
 
 
@@ -20,7 +21,7 @@ export default function () {
       <PriceGrid />
       <CharGrid>
         <CoinSportlight />
-        <div />
+        <PriceChart />
       </CharGrid>
     </Page>
   )
