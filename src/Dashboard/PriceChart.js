@@ -1,7 +1,7 @@
+import highchartsConfig from './HighchartsConfig';
 import React from 'react';
 import { Tile } from "../Shared/Tile";
 import { AppContext } from "../App/AppProvider";
-import highchartsConfig from './HighchartsConfig';
 import ReactHighcharts from 'react-highcharts';
 import HighchartsTheme from './HighchartsTheme';
 import ChartSelect from './ChartSelect';

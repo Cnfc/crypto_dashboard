@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import moment from 'moment';
 const cc = require('cryptocompare');
 
-
-
 const MAX_FAVORITES = 10;
+const TIME_UNITS = 10;
 
 export const AppContext = React.createContext();
 
@@ -22,13 +22,15 @@ export class AppProvider extends Component {
       isInFavorites: this.isInFavorites,
       setFilteredCoins: this.setFilteredCoins,
       coinList: null,
-      setCurrentFavorite: this.setCurrentFavorite
+      setCurrentFavorite: this.setCurrentFavorite,
+      changeChartSelect: this.changeChartSelect
     }
   }
 
   componentDidMount() {
     this.fetchCoins();
     this.fetchPrices();
+    this.fetchHistorical();
   }
 
   fetchCoins = async () => {
@@ -43,6 +45,38 @@ export class AppProvider extends Component {
     this.setState({ prices });
 
   };
+
+  fetchHistorical = async () => {
+    if (this.state.firstVisit) return;
+    let results = await this.historical();
+    let historical = [
+      {
+        name: this.state.currentFavorite,
+        data: results.map((ticker, index) => [
+          moment().subtract({ [this.state.timeInterval]: TIME_UNITS - index }).valueOf(),
+          ticker.USD
+        ])
+      }
+    ]
+    this.setState({ historical });
+  }
+
+  historical = () => {
+    let promises = [];
+    for (let units = TIME_UNITS; units > 0; units--) {
+      promises.push(
+        cc.priceHistorical(
+          this.state.currentFavorite,
+          ['USD'],
+          moment()
+            .subtract({ [this.state.timeInterval]: units })
+            .toDate()
+        )
+      )
+    }
+    return Promise.all(promises);
+  }
+
 
   prices = async () => {
     let returnData = [];
@@ -75,8 +109,10 @@ export class AppProvider extends Component {
 
   setCurrentFavorite = (sym) => {
     this.setState({
-      currentFavorite: sym
-    });
+      currentFavorite: sym,
+      historical: null
+    }, this.fetchHistorical);
+
     localStorage.setItem('cryptoDash', JSON.stringify({
       ...JSON.parse(localStorage.getItem('cryptoDash')),
       currentFavorite: sym
@@ -90,9 +126,12 @@ export class AppProvider extends Component {
     this.setState({
       firstVisit: false,
       page: 'dashboard',
-      currentFavorite
+      currentFavorite,
+      price: null,
+      historical: null
     }, () => {
       this.fetchPrices();
+      this.fetchHistorical();
     });
     localStorage.setItem('cryptoDash', JSON.stringify({
       favorites: this.state.favorites,
@@ -114,6 +153,10 @@ export class AppProvider extends Component {
   setPage = page => this.setState({ page })
 
   setFilteredCoins = (filteredCoins) => this.setState({ filteredCoins });
+
+  changeChartSelect = (value) => {
+    this.setState({ timeInterval: value, historical: null }, this.fetchHistorical);
+  }
 
   render() {
     return (

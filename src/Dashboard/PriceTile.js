@@ -25,7 +25,7 @@ const ChangePct = styled.div`
 `
 
 const numberFormat = number => {
-  return +(number + '').slice(0, 5);
+  return +(number + '').slice(0, 7);
 }
 
 const PriceTileStyled = styled(SelectableTile)`
