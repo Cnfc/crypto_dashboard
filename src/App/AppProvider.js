@@ -12,7 +12,7 @@ export class AppProvider extends Component {
       setPage: this.setPage,
       ...this.savedSettings(),
       confirmFavorites: this.confirmFavorites,
-      coinsList: null
+      coinList: null
     }
   }
 
@@ -21,9 +21,9 @@ export class AppProvider extends Component {
   }
 
   fetchCoins = async () => {
-    let coinsList = (await cc.coinList()).Data;
-    this.setState({ coinsList })
-    console.log(coinsList)
+    let coinList = (await cc.coinList()).Data;
+    this.setState({ coinList })
+    console.log(coinList)
   }
 
 
