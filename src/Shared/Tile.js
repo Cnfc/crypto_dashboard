@@ -1,30 +1,27 @@
 import styled from 'styled-components';
-import { subtleBoxShadow, lightBlueBackground, greenBoxShadow, redBoxShadow } from "../Shared/Styles";
+import { subtleBoxShadow, lightBlueBackground, greenBoxShadow, redBoxShadow } from "./Styles";
 
-export const SelectableTile = styled.div`
-  ${subtleBoxShadow};
-  ${lightBlueBackground};
-  padding: 10px;
-  
+export const Tile = styled.div`
+  ${subtleBoxShadow}
+  ${lightBlueBackground}
+  padding: 10px;   
+`
+
+export const SelectableTile = styled(Tile)`
   &:hover {
-    cursor: pointer;
+    cursor: pointer; 
     ${greenBoxShadow}
   }
+`
+
+export const DeletableTile = styled(SelectableTile)`
+	&:hover{
+		cursor: pointer; 
+		${redBoxShadow}
+	}
 `;
 
-
-export const DeletableTile = styled.div`
-  ${lightBlueBackground};
-  padding: 10px;
-
-
-  &:hover {
-    cursor: pointer;
-    ${redBoxShadow}
-  }
-`;
-
-export const DisabledTile = styled.div`
-  pointer-events: none;
+export const DisabledTile = styled(Tile)`
+	pointer-events: none;
   opacity: 0.4;
 `;
