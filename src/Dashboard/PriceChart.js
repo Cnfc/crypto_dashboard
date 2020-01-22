@@ -13,13 +13,14 @@ export default function () {
       {({ historical, changeChartSelect }) =>
         <Tile>
           <ChartSelect
-            defaultValue="months"
+            defaultValue="days"
             onChange={e => changeChartSelect(e.target.value)}
           >
             <option value="days"> Days </option>
             <option value="weeks"> Weeks </option>
             <option value="months"> Months </option>
           </ChartSelect>
+
           {historical ?
             <ReactHighcharts config={highchartsConfig(historical)} />
             : <div> Loading Historical Data </div>

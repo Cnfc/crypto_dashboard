@@ -14,6 +14,7 @@ export class AppProvider extends Component {
     this.state = {
       page: 'dashboard',
       favorites: ['BTC', 'ETH'],
+      timeInterval: 'months',
       ...this.savedSettings(),
       confirmFavorites: this.confirmFavorites,
       setPage: this.setPage,
@@ -165,5 +166,4 @@ export class AppProvider extends Component {
       </AppContext.Provider>
     )
   }
-
 }
